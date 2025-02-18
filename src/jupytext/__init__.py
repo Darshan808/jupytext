@@ -1,4 +1,4 @@
-"""Read and write Jupyter notebooks as text files"""
+"""Read and write Jupyter notebooks as text files. This is just for test"""
 
 from .formats import NOTEBOOK_EXTENSIONS, get_format_implementation, guess_format
 from .jupytext import read, reads, write, writes
