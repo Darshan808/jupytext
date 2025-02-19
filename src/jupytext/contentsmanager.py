@@ -121,7 +121,7 @@ def build_jupytext_contents_manager_class(base_contents_manager_class):
         async def save(self, model, path=""):
             """Save the file model and return the model with no content."""
             if model["type"] != "notebook":
-                await ensure_async(self.super.save(model, path))
+                return await ensure_async(self.super.save(model, path))
 
             path = path.strip("/")
             nbk = model["content"]
@@ -537,7 +537,7 @@ to your jupytext.toml file
             for old_alt_path, alt_fmt in old_alt_paths:
                 new_alt_path = full_path(new_base, alt_fmt)
                 if await ensure_async(self.exists(old_alt_path)):
-                    self.create_prefix_dir(new_alt_path, alt_fmt)
+                    await self.create_prefix_dir(new_alt_path, alt_fmt)
                     await ensure_async(
                         self.super.rename_file(old_alt_path, new_alt_path)
                     )

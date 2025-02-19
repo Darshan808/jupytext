@@ -97,7 +97,7 @@ async def test_pair_unpair_notebook(cm, tmpdir):
     assert len(nb2.cells[0]["outputs"]) == 0
 
 
-def test_load_save_rename(ipynb_py_R_jl_file, cm, tmpdir):
+async def test_load_save_rename(ipynb_py_R_jl_file, cm, tmpdir):
     tmp_ipynb = "notebook.ipynb"
     tmp_rmd = "notebook.Rmd"
 
@@ -138,7 +138,7 @@ def test_load_save_rename(ipynb_py_R_jl_file, cm, tmpdir):
     assert not os.path.isfile(str(tmpdir.join("new.Rmd")))
 
 
-def test_save_load_paired_md_notebook(ipynb_py_R_jl_file, cm, tmpdir):
+async def test_save_load_paired_md_notebook(ipynb_py_R_jl_file, cm, tmpdir):
     tmp_ipynb = "notebook.ipynb"
     tmp_md = "notebook.md"
 
@@ -155,7 +155,7 @@ def test_save_load_paired_md_notebook(ipynb_py_R_jl_file, cm, tmpdir):
     assert nb_md["content"].metadata["jupytext"]["formats"] == "ipynb,md"
 
 
-def test_pair_plain_script(percent_file, cm, tmpdir, caplog):
+async def test_pair_plain_script(percent_file, cm, tmpdir, caplog):
     tmp_py = "notebook.py"
     tmp_ipynb = "notebook.ipynb"
 
@@ -195,7 +195,7 @@ def test_pair_plain_script(percent_file, cm, tmpdir, caplog):
     assert "formats" not in nb2.metadata["jupytext"]
 
 
-def test_load_save_rename_nbpy(ipynb_py_file, cm, tmpdir):
+async def test_load_save_rename_nbpy(ipynb_py_file, cm, tmpdir):
     tmp_ipynb = "notebook.ipynb"
     tmp_nbpy = "notebook.nb.py"
 
@@ -224,7 +224,7 @@ def test_load_save_rename_nbpy(ipynb_py_file, cm, tmpdir):
         await cm.rename_file(tmp_nbpy, "suffix_missing.py")
 
 
-def test_load_save_py_freeze_metadata(python_file, cm, tmpdir):
+async def test_load_save_py_freeze_metadata(python_file, cm, tmpdir):
     if "light" in python_file:
         pytest.skip()
 
@@ -275,7 +275,7 @@ async def test_load_text_notebook(cm, tmpdir):
         assert nb_model[key] == py_model[key], key
 
 
-def test_load_save_rename_notebook_with_dot(ipynb_py_file, cm, tmpdir):
+async def test_load_save_rename_notebook_with_dot(ipynb_py_file, cm, tmpdir):
     tmp_ipynb = "1.notebook.ipynb"
     tmp_nbpy = "1.notebook.py"
 
@@ -300,7 +300,7 @@ def test_load_save_rename_notebook_with_dot(ipynb_py_file, cm, tmpdir):
     assert os.path.isfile(str(tmpdir.join("2.new_notebook.py")))
 
 
-def test_load_save_rename_nbpy_default_config(ipynb_py_file, cm, tmpdir):
+async def test_load_save_rename_nbpy_default_config(ipynb_py_file, cm, tmpdir):
     tmp_ipynb = "notebook.ipynb"
     tmp_nbpy = "notebook.nb.py"
 
@@ -338,7 +338,7 @@ def test_load_save_rename_nbpy_default_config(ipynb_py_file, cm, tmpdir):
     assert not os.path.isfile(str(tmpdir.join("new.nb.py")))
 
 
-def test_load_save_rename_non_ascii_path(ipynb_py_file, cm, tmpdir):
+async def test_load_save_rename_non_ascii_path(ipynb_py_file, cm, tmpdir):
     tmp_ipynb = "notebôk.ipynb"
     tmp_nbpy = "notebôk.nb.py"
 
@@ -377,7 +377,7 @@ def test_load_save_rename_non_ascii_path(ipynb_py_file, cm, tmpdir):
     assert not os.path.isfile(os.path.join(tmpdir, "nêw.nb.py"))
 
 
-def test_outdated_text_notebook(python_notebook, cm, tmpdir):
+async def test_outdated_text_notebook(python_notebook, cm, tmpdir):
     # 1. write py ipynb
     cm.formats = "py,ipynb"
     cm.outdated_text_notebook_margin = 0
@@ -487,7 +487,7 @@ async def test_outdated_text_notebook_diff_is_shown(cm, tmpdir, python_notebook)
     )
 
 
-def test_reload_notebook_after_jupytext_cli(python_notebook, cm, tmpdir):
+async def test_reload_notebook_after_jupytext_cli(python_notebook, cm, tmpdir):
     tmp_ipynb = str(tmpdir.join("notebook.ipynb"))
     tmp_nbpy = str(tmpdir.join("notebook.py"))
 
@@ -513,7 +513,7 @@ def test_reload_notebook_after_jupytext_cli(python_notebook, cm, tmpdir):
     compare_notebooks(nb, nb2)
 
 
-def test_load_save_percent_format(percent_file, cm, tmpdir):
+async def test_load_save_percent_format(percent_file, cm, tmpdir):
     tmp_py = "notebook.py"
     with open(percent_file) as stream:
         text_py = stream.read()
@@ -541,7 +541,7 @@ def test_load_save_percent_format(percent_file, cm, tmpdir):
     compare(text_py2, text_py)
 
 
-def test_save_to_percent_format(ipynb_julia_file, cm, tmpdir):
+async def test_save_to_percent_format(ipynb_julia_file, cm, tmpdir):
     tmp_ipynb = "notebook.ipynb"
     tmp_jl = "notebook.jl"
 
@@ -563,7 +563,7 @@ def test_save_to_percent_format(ipynb_julia_file, cm, tmpdir):
     assert metadata["jupytext"]["formats"] == "ipynb,jl:percent"
 
 
-def test_save_using_preferred_and_default_format_170(ipynb_py_file, cm, tmpdir):
+async def test_save_using_preferred_and_default_format_170(ipynb_py_file, cm, tmpdir):
     nb = read(ipynb_py_file)
 
     # Way 0: preferred_jupytext_formats_save, no prefix + formats
@@ -608,7 +608,7 @@ def test_save_using_preferred_and_default_format_170(ipynb_py_file, cm, tmpdir):
     assert nb_py.metadata["jupytext"]["text_representation"]["format_name"] == "percent"
 
 
-def test_open_using_preferred_and_default_format_174(ipynb_py_file, cm, tmpdir):
+async def test_open_using_preferred_and_default_format_174(ipynb_py_file, cm, tmpdir):
     tmp_ipynb = str(tmpdir.join("notebook.ipynb"))
     tmp_py = str(tmpdir.join("python/notebook.py"))
     tmp_py2 = str(tmpdir.join("other/notebook.py"))
@@ -642,7 +642,7 @@ def test_open_using_preferred_and_default_format_174(ipynb_py_file, cm, tmpdir):
     assert not os.path.isfile(str(tmpdir.join("other/notebook.ipynb")))
 
 
-def test_kernelspec_are_preserved(ipynb_py_file, cm, tmpdir):
+async def test_kernelspec_are_preserved(ipynb_py_file, cm, tmpdir):
     if "many hash" in ipynb_py_file:
         pytest.skip()
     tmp_ipynb = str(tmpdir.join("notebook.ipynb"))
@@ -670,7 +670,7 @@ def test_kernelspec_are_preserved(ipynb_py_file, cm, tmpdir):
     compare_notebooks(model2["content"], model["content"])
 
 
-def test_save_to_light_percent_sphinx_format(ipynb_py_file, cm, tmpdir):
+async def test_save_to_light_percent_sphinx_format(ipynb_py_file, cm, tmpdir):
     tmp_ipynb = "notebook.ipynb"
     tmp_lgt_py = "notebook.lgt.py"
     tmp_pct_py = "notebook.pct.py"
@@ -709,7 +709,7 @@ def test_save_to_light_percent_sphinx_format(ipynb_py_file, cm, tmpdir):
     compare_notebooks(model["content"], nb)
 
 
-def test_pair_notebook_with_dot(ipynb_py_file, cm, tmpdir):
+async def test_pair_notebook_with_dot(ipynb_py_file, cm, tmpdir):
     # Reproduce issue #138
     tmp_py = "file.5.1.py"
     tmp_ipynb = "file.5.1.ipynb"
@@ -737,7 +737,7 @@ def test_pair_notebook_with_dot(ipynb_py_file, cm, tmpdir):
     compare_notebooks(model["content"], nb)
 
 
-def test_preferred_format_allows_to_read_others_format(python_notebook, cm, tmpdir):
+async def test_preferred_format_allows_to_read_others_format(python_notebook, cm, tmpdir):
     # 1. write py ipynb
     tmp_ipynb = "notebook.ipynb"
     tmp_nbpy = "notebook.py"
@@ -803,7 +803,7 @@ async def test_preferred_formats_read_auto(cm, tmpdir):
     )
 
 
-def test_save_in_auto_extension_global(ipynb_py_R_jl_file, cm, tmpdir):
+async def test_save_in_auto_extension_global(ipynb_py_R_jl_file, cm, tmpdir):
     # load notebook
     nb = jupytext.read(ipynb_py_R_jl_file)
 
@@ -884,7 +884,7 @@ async def test_global_auto_pairing_works_with_empty_notebook(cm, tmpdir):
     assert nb2.cells[0].source == "2+2"
 
 
-def test_save_in_auto_extension_global_with_format(ipynb_py_R_jl_file, cm, tmpdir):
+async def test_save_in_auto_extension_global_with_format(ipynb_py_R_jl_file, cm, tmpdir):
     # load notebook
     nb = jupytext.read(ipynb_py_R_jl_file)
 
@@ -912,7 +912,7 @@ def test_save_in_auto_extension_global_with_format(ipynb_py_R_jl_file, cm, tmpdi
     compare_notebooks(model["content"], nb)
 
 
-def test_save_in_auto_extension_local(ipynb_py_R_jl_file, cm, tmpdir):
+async def test_save_in_auto_extension_local(ipynb_py_R_jl_file, cm, tmpdir):
     # load notebook
     nb = jupytext.read(ipynb_py_R_jl_file)
     nb.metadata.setdefault("jupytext", {})["formats"] = "ipynb,auto:percent"
@@ -937,7 +937,7 @@ def test_save_in_auto_extension_local(ipynb_py_R_jl_file, cm, tmpdir):
     compare_notebooks(model["content"], nb)
 
 
-def test_save_in_pct_and_lgt_auto_extensions(ipynb_py_R_jl_file, cm, tmpdir):
+async def test_save_in_pct_and_lgt_auto_extensions(ipynb_py_R_jl_file, cm, tmpdir):
     # load notebook
     nb = jupytext.read(ipynb_py_R_jl_file)
 
@@ -963,7 +963,7 @@ def test_save_in_pct_and_lgt_auto_extensions(ipynb_py_R_jl_file, cm, tmpdir):
         assert read_format_from_metadata(stream.read(), auto_ext) == "light"
 
 
-def test_metadata_filter_is_effective(ipynb_py_R_jl_file, cm, tmpdir):
+async def test_metadata_filter_is_effective(ipynb_py_R_jl_file, cm, tmpdir):
     if re.match(r".*(magic|305).*", ipynb_py_R_jl_file):
         pytest.skip()
     nb = jupytext.read(ipynb_py_R_jl_file)
@@ -1049,7 +1049,7 @@ print('hello2')
 
 
 @pytest.mark.parametrize("ext", [".py", ".ipynb"])
-def test_local_format_can_deactivate_pairing(ipynb_py_file, ext, cm, tmpdir):
+async def test_local_format_can_deactivate_pairing(ipynb_py_file, ext, cm, tmpdir):
     """This is a test for #157: local format can be used to deactivate the global pairing"""
     nb = jupytext.read(ipynb_py_file)
     nb.metadata["jupytext_formats"] = ext[1:]  # py or ipynb
@@ -1076,7 +1076,7 @@ def test_local_format_can_deactivate_pairing(ipynb_py_file, ext, cm, tmpdir):
     compare_notebooks(nb3, nb)
 
 
-def test_global_pairing_allows_to_save_other_file_types(rmd_file, cm, tmpdir):
+async def test_global_pairing_allows_to_save_other_file_types(rmd_file, cm, tmpdir):
     """This is a another test for #157: local format can be used to deactivate the global pairing"""
     nb = jupytext.read(rmd_file)
 
@@ -1163,7 +1163,7 @@ async def test_pair_notebook_in_dotdot_folder(cm, tmpdir):
     await cm.get("scripts/notebook_name.py")
 
 
-def test_split_at_heading_option(cm, tmpdir):
+async def test_split_at_heading_option(cm, tmpdir):
     text = """Markdown text
 
 # Header one
@@ -1244,7 +1244,7 @@ async def test_set_then_change_formats(cm, tmpdir):
     assert not os.path.isfile(tmp_py)
 
 
-def test_set_then_change_auto_formats(python_notebook, cm, tmpdir):
+async def test_set_then_change_auto_formats(python_notebook, cm, tmpdir):
     tmp_ipynb = str(tmpdir.join("nb.ipynb"))
     tmp_py = str(tmpdir.join("nb.py"))
     tmp_rmd = str(tmpdir.join("nb.Rmd"))
@@ -1281,7 +1281,7 @@ def test_set_then_change_auto_formats(python_notebook, cm, tmpdir):
     await cm.get("nb.ipynb")
 
 
-def test_share_py_recreate_ipynb(ipynb_py_R_jl_file, cm, tmpdir):
+async def test_share_py_recreate_ipynb(ipynb_py_R_jl_file, cm, tmpdir):
     tmp_ipynb = str(tmpdir.join("nb.ipynb"))
     tmp_py = str(tmpdir.join("nb.py"))
 
@@ -1543,7 +1543,7 @@ async def test_notebook_extensions_in_config(cm, tmpdir, cwd_tmpdir):
     assert model["type"] == "file"
 
 
-def test_invalid_config_in_cm(tmpdir, cwd_tmpdir):
+async def test_invalid_config_in_cm(tmpdir, cwd_tmpdir):
     nb = new_notebook()
     write(nb, "notebook.ipynb")
     tmpdir.join("pyproject.toml").write(
@@ -1555,10 +1555,7 @@ displaylimit = 1"""
     cm = jupytext.TextFileContentsManager()
     cm.root_dir = str(tmpdir)
 
-    # list directory
-    cm.get("")
-
-    model = cm.get("notebook.ipynb")
+    model = await cm.get("notebook.ipynb")
     assert model["type"] == "notebook"
 
 
@@ -1705,10 +1702,9 @@ async def test_new_untitled(cm, tmpdir):
     assert (await cm.new_untitled(type="notebook", ext=".md:myst"))[
         "path"
     ] == untitled + "3.md"
-    assert (
-        await cm.new_untitled(type="notebook", ext=".py:percent")["path"]
-        == untitled + "4.py"
-    )
+    assert (await cm.new_untitled(type="notebook", ext=".py:percent"))[
+        "path"
+    ] == untitled + "4.py"
     assert (await cm.new_untitled(type="notebook", ext=".Rmd"))[
         "path"
     ] == untitled + "5.Rmd"
@@ -1735,7 +1731,7 @@ async def test_nested_prefix(cm, tmpdir):
     assert tmpdir.join("nested").join("prefix").join("notebook.py").isfile()
 
 
-def test_timestamp_is_correct_after_reload_978(python_notebook, cm, tmp_path):
+async def test_timestamp_is_correct_after_reload_978(python_notebook, cm, tmp_path):
     """Here we reproduce the conditions in Issue #978 and make sure no
     warning is generated"""
     nb = python_notebook
@@ -1776,22 +1772,21 @@ def test_timestamp_is_correct_after_reload_978(python_notebook, cm, tmp_path):
     assert model["last_modified"] > org_model["last_modified"]
 
 
-def test_move_paired_notebook_to_subdir_1059(tmp_path, python_notebook):
+async def test_move_paired_notebook_to_subdir_1059(tmp_path, python_notebook):
     (tmp_path / "jupytext.toml").write_text(
         'formats = "notebooks///ipynb,scripts///py:percent"\n'
     )
     cm = jupytext.TextFileContentsManager()
     cm.root_dir = str(tmp_path)
-
     # create paired notebook
     (tmp_path / "notebooks").mkdir()
-    cm.save(notebook_model(python_notebook), path="notebooks/my_notebook.ipynb")
+    await cm.save(notebook_model(python_notebook), path="notebooks/my_notebook.ipynb")
     assert (tmp_path / "notebooks" / "my_notebook.ipynb").exists()
     assert (tmp_path / "scripts" / "my_notebook.py").exists()
 
     # move notebook
     (tmp_path / "notebooks" / "subdir").mkdir()
-    cm.rename_file("notebooks/my_notebook.ipynb", "notebooks/subdir/my_notebook.ipynb")
+    await cm.rename_file("notebooks/my_notebook.ipynb", "notebooks/subdir/my_notebook.ipynb")
     assert (tmp_path / "notebooks" / "subdir" / "my_notebook.ipynb").exists()
     assert (tmp_path / "scripts" / "subdir" / "my_notebook.py").exists()
 
@@ -1799,6 +1794,6 @@ def test_move_paired_notebook_to_subdir_1059(tmp_path, python_notebook):
     assert not (tmp_path / "scripts" / "my_notebook.py").exists()
 
     # check notebook content
-    model = cm.get("scripts/subdir/my_notebook.py")
+    model = await cm.get("scripts/subdir/my_notebook.py")
     nb = model["content"]
     compare_notebooks(nb, python_notebook, fmt="py:percent")
