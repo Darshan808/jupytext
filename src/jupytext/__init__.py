@@ -1,9 +1,9 @@
-"""Read and write Jupyter notebooks as text files"""
+"""Read and write Jupyter notebooks as text files. This is just for test"""
 
 from .formats import NOTEBOOK_EXTENSIONS, get_format_implementation, guess_format
 from .jupytext import read, reads, write, writes
 from .reraise import reraise
-from .version import __version__
+from .version import (__version__)
 
 try:
     from .contentsmanager import build_jupytext_contents_manager_class
